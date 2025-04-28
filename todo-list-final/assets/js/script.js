@@ -9,6 +9,7 @@ const btn = document.getElementById("add-todo");
 // Récupère le conteneur où s’affichent toutes les tâches
 const todoContainer = document.getElementById("todo-list");
 
+
 // Initialise un tableau vide pour stocker les todos
 let Arraytodo = [];
 
@@ -36,7 +37,7 @@ const displayTodo = (todo = null) => {
 
   // Ajoute le HTML d’une tâche dans le conteneur
   todoContainer.innerHTML += `
-    <div class="listContainer">
+    <div class="listContainer" draggable="true">
         <li>
             <img src="./assets/img/add.png" alt="listIcon">
             <input type="text" class="inputTodo" value="${value}" id=${numId++}>
@@ -69,6 +70,8 @@ const displayTodo = (todo = null) => {
 
   // Ajoute les événements sur les nouvelles icônes
   addEventListenersToIcons();
+  // Drag and Drop
+  addDragAndDropListerner();
 };
 
 // Fonction pour ajouter les événements aux icônes de chaque tâche
@@ -183,6 +186,40 @@ const addEventListenersToIcons = () => {
     });
   });
 };
+
+let draggedItem = null;
+const addDragAndDropListerner = ()=>{
+  const items = document.querySelectorAll('.listContainer');
+  items.forEach((item)=>{
+    item.addEventListener('dragstart', ()=>{
+      draggedItem = item;
+      setTimeout(()=>{
+        item.style.display = 'none';
+      }, 0);
+    })
+    item.addEventListener('dragend', ()=>{
+      setTimeout(()=>{
+        item.style.display = 'flex';
+        draggedItem = null;
+      }, 0);
+    })
+    item.addEventListener('dragover', (e)=>{
+      e.preventDefault();
+    })
+    item.addEventListener('dragenter', (e)=>{
+      e.preventDefault();
+    })
+    item.addEventListener('dragleave', (e)=>{
+      e.preventDefault();
+    })
+    item.addEventListener('drop', function(e){
+      e.preventDefault();
+      if (this !== draggedItem) {
+        this.parentNode.insertBefore(draggedItem, this);
+      }
+    });
+  });
+}
 
 // Fonction pour envoyer la tâche à une API simulée
 const sendTodoToAPI = (todo) => {

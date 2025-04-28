@@ -138,7 +138,7 @@ li input{
     align-items: center;
     justify-content: space-around;
 }
-#btnEdit{
+.btnEdit{
     background: #3a00c0;
     border: none;
     padding: 10px;
